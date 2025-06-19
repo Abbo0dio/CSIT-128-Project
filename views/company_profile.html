@@ -1,1 +1,509 @@
-<h2>Company Profile</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile - Company Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <div>
+                <h2 style="margin: 0; color: var(--primary-color);">🏢 Company Profile</h2>
+                <p style="margin: 0; color: var(--text-light);">Manage your company information and attract top talent</p>
+            </div>
+            <div>
+                <a href="/company/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Profile Visibility Status -->
+        <div style="background: linear-gradient(135deg, #dcfce7, #bbf7d0); border: 1px solid var(--success-color); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 2rem;">
+            <h4 style="color: var(--success-color); margin-bottom: 1rem;">✅ Profile Status: <span id="profileStatus">Active & Visible</span></h4>
+            <p style="color: var(--text-dark); margin: 0; font-size: 0.9rem;">Your company profile is visible to students. Complete all sections to improve your attractiveness to candidates.</p>
+        </div>
+
+        <form id="companyProfileForm" method="POST" action="/company/profile/update" enctype="multipart/form-data" novalidate>
+            <div id="alertContainer"></div>
+
+            <!-- Basic Company Information -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">🏢 Company Information</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="companyName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company Name *</label>
+                        <input type="text" name="company_name" id="companyName" required
+                               placeholder="Your company name"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="companyNameError"></div>
+                    </div>
+
+                    <div>
+                        <label for="industry" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Industry *</label>
+                        <select name="industry" id="industry" required
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                            <option value="">Select industry</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Finance">Finance & Banking</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Retail">Retail & E-commerce</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Media">Media & Entertainment</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Hospitality">Hospitality & Tourism</option>
+                            <option value="Energy">Energy & Utilities</option>
+                            <option value="Transportation">Transportation & Logistics</option>
+                            <option value="Government">Government & Public Sector</option>
+                            <option value="Non-Profit">Non-Profit</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="error-message" id="industryError"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="companySize" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company Size *</label>
+                        <select name="company_size" id="companySize" required
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                            <option value="">Select size</option>
+                            <option value="1-10">1-10 employees (Startup)</option>
+                            <option value="11-50">11-50 employees (Small)</option>
+                            <option value="51-200">51-200 employees (Medium)</option>
+                            <option value="201-500">201-500 employees (Large)</option>
+                            <option value="501-1000">501-1000 employees (Enterprise)</option>
+                            <option value="1000+">1000+ employees (Corporation)</option>
+                        </select>
+                        <div class="error-message" id="companySizeError"></div>
+                    </div>
+
+                    <div>
+                        <label for="foundedYear" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Founded Year</label>
+                        <input type="number" name="founded_year" id="foundedYear" min="1800" max="2025"
+                               placeholder="e.g., 2010"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="foundedYearError"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company Description *</label>
+                    <textarea name="description" id="description" required rows="4"
+                              placeholder="Describe your company, its mission, values, and what makes it unique..."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="descriptionError"></div>
+                    <div style="text-align: right; font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">
+                        <span id="descriptionCount">0</span>/1000 characters
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--success-color); padding-bottom: 0.5rem;">📍 Contact Information</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="location" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Headquarters Location *</label>
+                        <input type="text" name="location" id="location" required
+                               placeholder="e.g., Dubai, UAE"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="locationError"></div>
+                    </div>
+
+                    <div>
+                        <label for="website" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company Website</label>
+                        <input type="url" name="website" id="website" data-url
+                               placeholder="https://yourcompany.com"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="websiteError"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="contactPerson" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">HR Contact Person *</label>
+                        <input type="text" name="contact_person" id="contactPerson" required
+                               placeholder="Full name of HR representative"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="contactPersonError"></div>
+                    </div>
+
+                    <div>
+                        <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Contact Phone</label>
+                        <input type="tel" name="phone" id="phone" data-phone
+                               placeholder="+971 4 123 4567"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Culture & Benefits -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--warning-color); padding-bottom: 0.5rem;">🎯 Culture & Benefits</h3>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="culture" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Company Culture</label>
+                    <textarea name="culture" id="culture" rows="3"
+                              placeholder="Describe your company culture, work environment, and team dynamics..."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="cultureError"></div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="benefits" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Employee Benefits</label>
+                    <textarea name="benefits" id="benefits" rows="3"
+                              placeholder="List benefits like health insurance, flexible hours, learning opportunities, etc..."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="benefitsError"></div>
+                </div>
+
+                <div>
+                    <label for="techStack" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Technology Stack</label>
+                    <input type="text" name="tech_stack" id="techStack"
+                           placeholder="e.g., React, Node.js, Python, AWS, Docker"
+                           style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                    <div class="error-message" id="techStackError"></div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">💡 Separate technologies with commas</div>
+                </div>
+            </div>
+
+            <!-- Company Logo Upload -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">🎨 Company Logo</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;">
+                    <div style="text-align: center;">
+                        <div id="logoPreview" style="width: 150px; height: 150px; border: 2px dashed var(--border-color); border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; background: white; margin: 0 auto 1rem;">
+                            <span style="color: var(--text-light); font-size: 3rem;">🏢</span>
+                        </div>
+                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Current Logo</p>
+                    </div>
+
+                    <div>
+                        <div style="border: 2px dashed var(--border-color); border-radius: var(--border-radius); padding: 2rem; text-align: center; background: white;">
+                            <span style="font-size: 2rem; display: block; margin-bottom: 1rem; color: var(--text-light);">📸</span>
+                            <h4 style="color: var(--text-dark); margin-bottom: 1rem;">Upload Company Logo</h4>
+                            <p style="color: var(--text-light); margin-bottom: 1.5rem;">JPG, PNG files only, max 2MB<br>Recommended size: 300x300px</p>
+
+                            <input type="file" name="logo" id="logoFile" accept=".jpg,.jpeg,.png"
+                                   style="display: none;" onchange="handleLogoUpload(event)">
+
+                            <button type="button" onclick="document.getElementById('logoFile').click()"
+                                    class="btn btn-primary">
+                                Choose Logo
+                            </button>
+
+                            <div id="logoUploadStatus" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--success-color); color: white; border-radius: var(--border-radius);">
+                                <p style="margin: 0; font-weight: 500;">✓ New logo selected: <span id="logoFileName"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--info-color, #0ea5e9); padding-bottom: 0.5rem;">🔗 Social Media</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="linkedinUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">LinkedIn Company Page</label>
+                        <input type="url" name="linkedin_url" id="linkedinUrl" data-url
+                               placeholder="https://linkedin.com/company/yourcompany"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="linkedinUrlError"></div>
+                    </div>
+
+                    <div>
+                        <label for="twitterUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Twitter/X Profile</label>
+                        <input type="url" name="twitter_url" id="twitterUrl" data-url
+                               placeholder="https://twitter.com/yourcompany"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="twitterUrlError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button type="submit" id="saveBtn" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        <span id="saveBtnText">💾 Save Profile</span>
+                        <span id="saveBtnLoader" style="display: none;">⏳ Saving...</span>
+                    </button>
+                    <button type="button" onclick="previewProfile()" class="btn btn-info" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        👁️ Preview Profile
+                    </button>
+                    <button type="button" onclick="toggleVisibility()" id="visibilityBtn" class="btn btn-warning" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        🔄 Toggle Visibility
+                    </button>
+                    <a href="/company/dashboard" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none;">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Profile Preview Modal -->
+        <div id="profilePreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+            <div style="background: white; margin: 2rem auto; max-width: 900px; border-radius: var(--border-radius); position: relative;">
+                <div style="padding: 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; color: var(--primary-color);">👁️ Company Profile Preview</h3>
+                    <button onclick="closePreview()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+                </div>
+                <div id="profilePreviewContent" style="padding: 2rem;">
+                    <!-- Profile preview content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input-error {
+            border-color: var(--danger-color) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+        }
+
+        .input-success {
+            border-color: var(--success-color) !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+    </style>
+
+    <script src="/js/form-validation.js"></script>
+    <script>
+        let isVisible = true;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form validation
+            FormValidator.init('companyProfileForm');
+
+            // Load existing profile data
+            loadProfileData();
+
+            // Character counter for description
+            const description = document.getElementById('description');
+            const descriptionCount = document.getElementById('descriptionCount');
+            description.addEventListener('input', function() {
+                const count = this.value.length;
+                descriptionCount.textContent = count;
+
+                if (count > 1000) {
+                    descriptionCount.style.color = 'var(--danger-color)';
+                } else if (count > 800) {
+                    descriptionCount.style.color = 'var(--warning-color)';
+                } else {
+                    descriptionCount.style.color = 'var(--text-light)';
+                }
+            });
+        });
+
+        function loadProfileData() {
+            // Simulate loading existing profile data
+            const sampleData = {
+                company_name: 'TechCorp Solutions',
+                industry: 'Technology',
+                company_size: '201-500',
+                founded_year: '2018',
+                description: 'Leading technology solutions provider specializing in web development and cloud services. We help businesses transform digitally with cutting-edge solutions.',
+                location: 'Dubai, UAE',
+                website: 'https://techcorp.com',
+                contact_person: 'Ahmed Al-Rashid',
+                phone: '+971-4-555-0123',
+                culture: 'We foster innovation, collaboration, and continuous learning. Our diverse team works in an agile environment with flexible schedules and growth opportunities.',
+                benefits: 'Health insurance, flexible working hours, professional development budget, modern office space, team building activities',
+                tech_stack: 'React, Node.js, Python, AWS, Docker, Kubernetes',
+                linkedin_url: 'https://linkedin.com/company/techcorp-solutions'
+            };
+
+            // Populate form fields
+            Object.keys(sampleData).forEach(key => {
+                const field = document.querySelector(`[name="${key}"]`);
+                if (field) {
+                    field.value = sampleData[key];
+                }
+            });
+
+            // Update character count
+            const description = document.getElementById('description');
+            const descriptionCount = document.getElementById('descriptionCount');
+            descriptionCount.textContent = description.value.length;
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file
+            const validation = ValidationUtils.validateFile(file, {
+                maxSize: 2 * 1024 * 1024, // 2MB
+                allowedTypes: ['image/jpeg', 'image/jpg', 'image/png']
+            });
+
+            if (!validation.isValid) {
+                alert('Error: ' + validation.errors.join(', '));
+                event.target.value = '';
+                return;
+            }
+
+            // Preview the logo
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const logoPreview = document.getElementById('logoPreview');
+                logoPreview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--border-radius);">`;
+            };
+            reader.readAsDataURL(file);
+
+            // Show upload status
+            const logoUploadStatus = document.getElementById('logoUploadStatus');
+            const logoFileName = document.getElementById('logoFileName');
+
+            logoFileName.textContent = file.name;
+            logoUploadStatus.style.display = 'block';
+        }
+
+        function previewProfile() {
+            const modal = document.getElementById('profilePreviewModal');
+            const content = document.getElementById('profilePreviewContent');
+
+            // Generate profile preview
+            const companyName = document.getElementById('companyName').value || 'Company Name';
+            const industry = document.getElementById('industry').value || 'Industry';
+            const location = document.getElementById('location').value || 'Location';
+            const description = document.getElementById('description').value || 'Company description...';
+            const website = document.getElementById('website').value;
+            const techStack = document.getElementById('techStack').value;
+            const benefits = document.getElementById('benefits').value;
+
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: var(--light-bg); border-radius: var(--border-radius);">
+                    <div style="width: 120px; height: 120px; border-radius: var(--border-radius); background: var(--primary-color); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        🏢
+                    </div>
+                    <h2 style="margin: 0; color: var(--text-dark);">${companyName}</h2>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">${industry}</p>
+                    <p style="color: var(--text-light); margin: 0;">${location}</p>
+                    ${website ? `<a href="${website}" style="color: var(--primary-color); text-decoration: none;">🌐 Visit Website</a>` : ''}
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">📋 About Us</h4>
+                    <p style="line-height: 1.6;">${description}</p>
+                </div>
+
+                ${techStack ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💻 Technology Stack</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${techStack.split(',').map(tech =>
+                            `<span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">${tech.trim()}</span>`
+                        ).join('')}
+                    </div>
+                </div>
+                ` : ''}
+
+                ${benefits ? `
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 1rem;">🎁 Benefits & Perks</h4>
+                    <p style="line-height: 1.6;">${benefits}</p>
+                </div>
+                ` : ''}
+
+                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <p style="color: var(--text-light); font-style: italic;">This is how your company profile will appear to students</p>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closePreview() {
+            document.getElementById('profilePreviewModal').style.display = 'none';
+        }
+
+        function toggleVisibility() {
+            isVisible = !isVisible;
+            const statusElement = document.getElementById('profileStatus');
+            const visibilityBtn = document.getElementById('visibilityBtn');
+
+            if (isVisible) {
+                statusElement.textContent = 'Active & Visible';
+                statusElement.style.color = 'var(--success-color)';
+                visibilityBtn.textContent = '👁️ Hide Profile';
+                showAlert('Company profile is now visible to students', 'success');
+            } else {
+                statusElement.textContent = 'Hidden from Students';
+                statusElement.style.color = 'var(--warning-color)';
+                visibilityBtn.textContent = '👁️ Show Profile';
+                showAlert('Company profile is now hidden from students', 'warning');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('profilePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreview();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('companyProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const saveBtn = document.getElementById('saveBtn');
+            const saveBtnText = document.getElementById('saveBtnText');
+            const saveBtnLoader = document.getElementById('saveBtnLoader');
+
+            // Show loading state
+            saveBtn.disabled = true;
+            saveBtnText.style.display = 'none';
+            saveBtnLoader.style.display = 'inline';
+
+            // Simulate save process
+            setTimeout(() => {
+                showAlert('Company profile updated successfully! Your information has been saved and is visible to students.', 'success');
+
+                // Reset button state
+                saveBtn.disabled = false;
+                saveBtnText.style.display = 'inline';
+                saveBtnLoader.style.display = 'none';
+            }, 1500);
+        });
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

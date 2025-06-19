@@ -1,1 +1,444 @@
-<h2>Browse Internships</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Internships - Internship Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Header Section -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">🔍 Discover Amazing Internship Opportunities</h2>
+            <p style="color: var(--text-light); margin-bottom: 0;">Find the perfect internship that matches your skills and interests</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem; box-shadow: var(--shadow);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label for="searchQuery" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">🔍 Search Keywords</label>
+                    <input type="text" id="searchQuery" placeholder="e.g., frontend, marketing, design..."
+                           style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                </div>
+                <div>
+                    <label for="locationFilter" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">📍 Location</label>
+                    <select id="locationFilter" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <option value="">All Locations</option>
+                        <option value="Dubai">Dubai, UAE</option>
+                        <option value="Abu Dhabi">Abu Dhabi, UAE</option>
+                        <option value="Sharjah">Sharjah, UAE</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="typeFilter" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💼 Type</label>
+                    <select id="typeFilter" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <option value="">All Types</option>
+                        <option value="remote">Remote</option>
+                        <option value="on-site">On-site</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="salaryFilter" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💰 Salary Range</label>
+                    <select id="salaryFilter" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <option value="">Any Salary</option>
+                        <option value="0-2000">$0 - $2,000</option>
+                        <option value="2000-3000">$2,000 - $3,000</option>
+                        <option value="3000-4000">$3,000 - $4,000</option>
+                        <option value="4000+">$4,000+</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button onclick="applyFilters()" class="btn btn-primary">🔍 Search Internships</button>
+                <button onclick="clearFilters()" class="btn btn-secondary">🗑️ Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Results Summary -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 1rem; background: white; border-radius: var(--border-radius); border: 1px solid var(--border-color);">
+            <div>
+                <span id="resultsCount" style="font-weight: 600; color: var(--primary-color);">Loading...</span>
+                <span style="color: var(--text-light);">internships found</span>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <label for="sortBy" style="color: var(--text-light);">Sort by:</label>
+                <select id="sortBy" onchange="sortInternships()" style="padding: 0.5rem; border: 1px solid var(--border-color); border-radius: var(--border-radius);">
+                    <option value="recent">Most Recent</option>
+                    <option value="salary-high">Highest Salary</option>
+                    <option value="salary-low">Lowest Salary</option>
+                    <option value="deadline">Application Deadline</option>
+                    <option value="company">Company Name</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" style="text-align: center; padding: 3rem; color: var(--text-light);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <p>Loading amazing internship opportunities...</p>
+        </div>
+
+        <!-- Internships Grid -->
+        <div id="internshipsGrid" class="internships-grid" style="display: none;">
+            <!-- Internships will be dynamically loaded here -->
+        </div>
+
+        <!-- No Results State -->
+        <div id="noResults" style="display: none; text-align: center; padding: 3rem; color: var(--text-light);">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+            <h3 style="color: var(--text-dark);">No internships found</h3>
+            <p>Try adjusting your search criteria or check back later for new opportunities.</p>
+            <button onclick="clearFilters()" class="btn btn-primary">Clear All Filters</button>
+        </div>
+
+        <!-- Back Navigation -->
+        <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+            <a href="javascript:history.back()" class="btn btn-secondary">← Back to Dashboard</a>
+            <a href="/" class="btn btn-info">🏠 Home</a>
+        </div>
+    </div>
+
+    <script>
+        let allInternships = [];
+        let filteredInternships = [];
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInternships();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Real-time search
+            document.getElementById('searchQuery').addEventListener('input', debounce(applyFilters, 300));
+
+            // Filter change listeners
+            ['locationFilter', 'typeFilter', 'salaryFilter'].forEach(id => {
+                document.getElementById(id).addEventListener('change', applyFilters);
+            });
+        }
+
+        async function loadInternships() {
+            try {
+                // Simulate API call - replace with actual fetch to /api/internships
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Sample data - replace with actual API response
+                allInternships = [
+                    {
+                        id: 1,
+                        title: "Frontend Developer Intern",
+                        company_name: "TechCorp Solutions",
+                        location: "Dubai, UAE",
+                        type: "hybrid",
+                        duration: "3 months",
+                        salary: 3000,
+                        salary_type: "monthly",
+                        description: "Join our development team to work on exciting web applications using modern technologies like React and Vue.js. You'll collaborate with senior developers and gain hands-on experience in frontend development.",
+                        required_skills: "HTML, CSS, JavaScript, React, Git",
+                        application_deadline: "2025-07-15",
+                        positions_available: 2,
+                        created_at: "2025-06-01"
+                    },
+                    {
+                        id: 2,
+                        title: "Digital Marketing Intern",
+                        company_name: "Innovate Digital",
+                        location: "Abu Dhabi, UAE",
+                        type: "on-site",
+                        duration: "4 months",
+                        salary: 2500,
+                        salary_type: "monthly",
+                        description: "Assist our marketing team in creating engaging content and managing social media campaigns for our clients. Perfect opportunity to learn digital marketing strategies and tools.",
+                        required_skills: "Social Media Marketing, Content Creation, Adobe Creative Suite",
+                        application_deadline: "2025-07-20",
+                        positions_available: 1,
+                        created_at: "2025-06-05"
+                    },
+                    {
+                        id: 3,
+                        title: "Backend Developer Intern",
+                        company_name: "TechCorp Solutions",
+                        location: "Remote",
+                        type: "remote",
+                        duration: "6 months",
+                        salary: 3500,
+                        salary_type: "monthly",
+                        description: "Work with our backend team to develop APIs and database solutions using Node.js and MySQL. Great opportunity to learn server-side development and database management.",
+                        required_skills: "Node.js, MySQL, REST APIs, Git",
+                        application_deadline: "2025-07-10",
+                        positions_available: 1,
+                        created_at: "2025-06-10"
+                    },
+                    {
+                        id: 4,
+                        title: "UI/UX Design Intern",
+                        company_name: "Creative Studios",
+                        location: "Dubai, UAE",
+                        type: "hybrid",
+                        duration: "4 months",
+                        salary: 2800,
+                        salary_type: "monthly",
+                        description: "Work with our design team to create amazing user experiences for web and mobile applications. Learn industry-standard design tools and methodologies.",
+                        required_skills: "Figma, Adobe XD, User Research, Prototyping",
+                        application_deadline: "2025-07-25",
+                        positions_available: 2,
+                        created_at: "2025-06-12"
+                    },
+                    {
+                        id: 5,
+                        title: "Data Science Intern",
+                        company_name: "Analytics Pro",
+                        location: "Remote",
+                        type: "remote",
+                        duration: "5 months",
+                        salary: 3200,
+                        salary_type: "monthly",
+                        description: "Join our data team to work on machine learning projects and data analysis. Gain experience with Python, pandas, and modern ML frameworks.",
+                        required_skills: "Python, Machine Learning, SQL, Statistics",
+                        application_deadline: "2025-08-01",
+                        positions_available: 1,
+                        created_at: "2025-06-15"
+                    }
+                ];
+
+                filteredInternships = [...allInternships];
+                displayInternships();
+                updateResultsCount();
+
+            } catch (error) {
+                console.error('Error loading internships:', error);
+                showError('Failed to load internships. Please try again later.');
+            }
+        }
+
+        function displayInternships() {
+            const loadingState = document.getElementById('loadingState');
+            const internshipsGrid = document.getElementById('internshipsGrid');
+            const noResults = document.getElementById('noResults');
+
+            loadingState.style.display = 'none';
+            noResults.style.display = 'none';
+
+            if (filteredInternships.length === 0) {
+                noResults.style.display = 'block';
+                internshipsGrid.style.display = 'none';
+                return;
+            }
+
+            internshipsGrid.style.display = 'grid';
+            internshipsGrid.innerHTML = filteredInternships.map(internship => createInternshipCard(internship)).join('');
+        }
+
+        function createInternshipCard(internship) {
+            const daysUntilDeadline = Math.ceil((new Date(internship.application_deadline) - new Date()) / (1000 * 60 * 60 * 24));
+            const isUrgent = daysUntilDeadline <= 7;
+
+            return `
+                <div class="internship-card" style="border-left: 4px solid ${isUrgent ? 'var(--danger-color)' : 'var(--primary-color)'};">
+                    ${isUrgent ? '<div style="background: var(--danger-color); color: white; padding: 0.25rem 0.75rem; border-radius: 0 0 var(--border-radius) 0; position: absolute; top: 0; right: 0; font-size: 0.8rem; font-weight: 500;">⏰ ${daysUntilDeadline} days left</div>' : ''}
+
+                    <div style="position: relative; margin-bottom: 1rem;">
+                        <h3 style="margin-bottom: 0.5rem; color: var(--primary-color);">${internship.title}</h3>
+                        <p style="margin: 0; color: var(--text-light); font-weight: 500;">🏢 ${internship.company_name}</p>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span>📍</span>
+                            <span>${internship.location}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span>💼</span>
+                            <span style="text-transform: capitalize;">${internship.type}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span>⏱️</span>
+                            <span>${internship.duration}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span>💰</span>
+                            <span style="font-weight: 600; color: var(--success-color);">$${internship.salary.toLocaleString()}/${internship.salary_type}</span>
+                        </div>
+                    </div>
+
+                    <p class="description" style="color: var(--text-light); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;">
+                        ${internship.description.length > 120 ? internship.description.substring(0, 120) + '...' : internship.description}
+                    </p>
+
+                    <div style="margin-bottom: 1rem;">
+                        <p style="margin: 0 0 0.5rem 0; font-size: 0.8rem; color: var(--text-light); font-weight: 500;">Required Skills:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                            ${internship.required_skills.split(', ').map(skill =>
+                                `<span style="background: var(--light-bg); color: var(--primary-color); padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem; border: 1px solid var(--border-color);">${skill.trim()}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                        <div style="font-size: 0.8rem; color: var(--text-light);">
+                            📅 Apply by: ${new Date(internship.application_deadline).toLocaleDateString()}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--success-color); font-weight: 500;">
+                            ${internship.positions_available} position${internship.positions_available > 1 ? 's' : ''} available
+                        </div>
+                    </div>
+
+                    <div class="actions" style="display: flex; gap: 0.5rem;">
+                        <button onclick="viewInternshipDetails(${internship.id})" class="btn btn-info" style="flex: 1; padding: 0.75rem;">
+                            👁️ View Details
+                        </button>
+                        <button onclick="applyForInternship(${internship.id})" class="btn btn-success" style="flex: 1; padding: 0.75rem;">
+                            ✨ Apply Now
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function applyFilters() {
+            const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+            const locationFilter = document.getElementById('locationFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+            const salaryFilter = document.getElementById('salaryFilter').value;
+
+            filteredInternships = allInternships.filter(internship => {
+                // Search query filter
+                const matchesSearch = !searchQuery ||
+                    internship.title.toLowerCase().includes(searchQuery) ||
+                    internship.company_name.toLowerCase().includes(searchQuery) ||
+                    internship.description.toLowerCase().includes(searchQuery) ||
+                    internship.required_skills.toLowerCase().includes(searchQuery);
+
+                // Location filter
+                const matchesLocation = !locationFilter ||
+                    internship.location.includes(locationFilter) ||
+                    (locationFilter === 'Remote' && internship.type === 'remote');
+
+                // Type filter
+                const matchesType = !typeFilter || internship.type === typeFilter;
+
+                // Salary filter
+                let matchesSalary = true;
+                if (salaryFilter) {
+                    const salary = internship.salary;
+                    switch (salaryFilter) {
+                        case '0-2000':
+                            matchesSalary = salary <= 2000;
+                            break;
+                        case '2000-3000':
+                            matchesSalary = salary > 2000 && salary <= 3000;
+                            break;
+                        case '3000-4000':
+                            matchesSalary = salary > 3000 && salary <= 4000;
+                            break;
+                        case '4000+':
+                            matchesSalary = salary > 4000;
+                            break;
+                    }
+                }
+
+                return matchesSearch && matchesLocation && matchesType && matchesSalary;
+            });
+
+            sortInternships();
+            displayInternships();
+            updateResultsCount();
+        }
+
+        function sortInternships() {
+            const sortBy = document.getElementById('sortBy').value;
+
+            filteredInternships.sort((a, b) => {
+                switch (sortBy) {
+                    case 'recent':
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    case 'salary-high':
+                        return b.salary - a.salary;
+                    case 'salary-low':
+                        return a.salary - b.salary;
+                    case 'deadline':
+                        return new Date(a.application_deadline) - new Date(b.application_deadline);
+                    case 'company':
+                        return a.company_name.localeCompare(b.company_name);
+                    default:
+                        return 0;
+                }
+            });
+
+            displayInternships();
+        }
+
+        function clearFilters() {
+            document.getElementById('searchQuery').value = '';
+            document.getElementById('locationFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('salaryFilter').value = '';
+            document.getElementById('sortBy').value = 'recent';
+
+            filteredInternships = [...allInternships];
+            sortInternships();
+            updateResultsCount();
+        }
+
+        function updateResultsCount() {
+            document.getElementById('resultsCount').textContent = filteredInternships.length;
+        }
+
+        function viewInternshipDetails(id) {
+            // Implement internship details view
+            alert(`Viewing details for internship ID: ${id}\n\nThis would open a detailed view of the internship with full description, requirements, company info, etc.`);
+        }
+
+        function applyForInternship(id) {
+            // Check if user is logged in and is a student
+            const isLoggedIn = true; // Replace with actual session check
+            const isStudent = true; // Replace with actual role check
+
+            if (!isLoggedIn) {
+                alert('Please log in to apply for internships.');
+                window.location.href = '/login';
+                return;
+            }
+
+            if (!isStudent) {
+                alert('Only students can apply for internships.');
+                return;
+            }
+
+            // Implement application process
+            const internship = allInternships.find(i => i.id === id);
+            if (confirm(`Apply for ${internship.title} at ${internship.company_name}?\n\nThis will redirect you to the application form.`)) {
+                // window.location.href = `/internships/${id}/apply`;
+                alert('Application form would open here. Feature coming soon!');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-error';
+            errorDiv.textContent = message;
+            document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.container').firstChild);
+
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,14 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Internship Portal</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Management Portal - Connect Students with Opportunities</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Welcome to the Internship Management Portal</h1>
-  <nav>
-    <a href="login.html">Login</a> |
-    <a href="signup.html">Sign Up</a>
-  </nav>
+    <div class="welcome-container fade-in">
+        <h1>🚀 Welcome to the Internship Management Portal</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem; color: rgba(255,255,255,0.9);">
+            Connecting talented students with amazing internship opportunities
+        </p>
+
+        <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; margin: 2rem 0; backdrop-filter: blur(10px);">
+            <h3 style="color: white; margin-bottom: 1rem;">Choose Your Path:</h3>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2);">
+                    <h4 style="color: white; margin-bottom: 1rem;">👨‍🎓 For Students</h4>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">Find and apply for internships that match your skills and interests</p>
+                    <ul style="color: rgba(255,255,255,0.7); text-align: left; margin-bottom: 1rem;">
+                        <li>Browse internship opportunities</li>
+                        <li>Apply with your resume</li>
+                        <li>Track application status</li>
+                        <li>Build your professional profile</li>
+                    </ul>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 8px; border: 2px solid rgba(255,255,255,0.2);">
+                    <h4 style="color: white; margin-bottom: 1rem;">🏢 For Companies</h4>
+                    <p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">Post internships and discover talented students for your organization</p>
+                    <ul style="color: rgba(255,255,255,0.7); text-align: left; margin-bottom: 1rem;">
+                        <li>Post internship listings</li>
+                        <li>Manage applications</li>
+                        <li>Review student profiles</li>
+                        <li>Streamline hiring process</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <nav style="margin-top: 3rem;">
+            <a href="/login" class="btn btn-primary" style="margin: 0.5rem; padding: 1rem 2rem; font-size: 1.1rem;">
+                🔑 Login to Your Account
+            </a>
+            <a href="/signup" class="btn btn-success" style="margin: 0.5rem; padding: 1rem 2rem; font-size: 1.1rem;">
+                ✨ Create New Account
+            </a>
+            <a href="/browse_internships" class="btn btn-info" style="margin: 0.5rem; padding: 1rem 2rem; font-size: 1.1rem;">
+                👀 Browse Internships
+            </a>
+        </nav>
+
+        <div style="margin-top: 3rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <h3 style="color: white; margin-bottom: 1rem;">📊 Platform Statistics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #60a5fa;">500+</div>
+                    <div style="color: rgba(255,255,255,0.8);">Students Registered</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #34d399;">100+</div>
+                    <div style="color: rgba(255,255,255,0.8);">Companies</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #fbbf24;">250+</div>
+                    <div style="color: rgba(255,255,255,0.8);">Active Internships</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #f87171;">95%</div>
+                    <div style="color: rgba(255,255,255,0.8);">Success Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Internship Management Portal. Built for connecting talent with opportunity.</p>
+        <p style="margin-top: 0.5rem; color: rgba(255,255,255,0.7);">
+            Developed by CSIT128 Students | University of Wollongong in Dubai
+        </p>
+    </div>
+
+    <script>
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn');
+
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px) scale(1.05)';
+                });
+
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Animate statistics on load
+            const stats = document.querySelectorAll('[style*="font-size: 2rem"]');
+            stats.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.style.animation = `fadeIn 0.8s ease-out ${index * 0.2}s both`;
+                }, 1000);
+            });
+        });
+    </script>
 </body>
 </html>

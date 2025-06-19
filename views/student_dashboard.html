@@ -1,1 +1,308 @@
-<h2>Student Dashboard</h2><ul><li><a href='/browse_internships'>Browse Internships</a></li><li><a href='/student/applications'>My Applications</a></li><li><a href='/student/profile'>My Profile</a></li></ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Internship Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Header Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <div>
+                <h2 style="margin: 0; color: var(--primary-color);">👨‍🎓 Student Dashboard</h2>
+                <p style="margin: 0; color: var(--text-light);">Welcome back! Ready to find your next opportunity?</p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="color: var(--text-light); font-size: 0.9rem;" id="lastLogin">Last login: Today</span>
+                <form method="POST" action="/logout" style="margin: 0;">
+                    <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">🚪 Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="applicationsCount">-</div>
+                <div style="opacity: 0.9;">Applications Submitted</div>
+            </div>
+            <div style="background: linear-gradient(135deg, var(--success-color), #047857); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="shortlistedCount">-</div>
+                <div style="opacity: 0.9;">Shortlisted</div>
+            </div>
+            <div style="background: linear-gradient(135deg, var(--warning-color), #b45309); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="pendingCount">-</div>
+                <div style="opacity: 0.9;">Pending Review</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="acceptedCount">-</div>
+                <div style="opacity: 0.9;">Accepted</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--text-dark);">🎯 Quick Actions</h3>
+            <div class="dashboard">
+                <ul style="margin: 0;">
+                    <li>
+                        <a href="/browse_internships">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">🔍</span>
+                                <div>
+                                    <div style="font-weight: 600;">Browse Internships</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Discover new opportunities</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/student/applications">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">📋</span>
+                                <div>
+                                    <div style="font-weight: 600;">My Applications</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Track your progress</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/student/profile">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">👤</span>
+                                <div>
+                                    <div style="font-weight: 600;">My Profile</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Update your information</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/student/resume">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">📄</span>
+                                <div>
+                                    <div style="font-weight: 600;">Manage Resume</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Upload and update resume</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recent Applications -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: var(--text-dark);">📈 Recent Applications</h3>
+                <a href="/student/applications" class="btn btn-info" style="padding: 0.5rem 1rem;">View All</a>
+            </div>
+            <div id="recentApplications">
+                <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔄</span>
+                    <p>Loading your applications...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Internships -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: var(--text-dark);">⭐ Recommended for You</h3>
+                <a href="/browse_internships" class="btn btn-primary" style="padding: 0.5rem 1rem;">Browse All</a>
+            </div>
+            <div id="recommendedInternships">
+                <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔄</span>
+                    <p>Loading recommendations...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Completion -->
+        <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 1px solid var(--warning-color); border-radius: var(--border-radius); padding: 2rem; margin-top: 2rem;">
+            <h4 style="color: var(--warning-color); margin-bottom: 1rem;">📊 Profile Completion</h4>
+            <div style="background: white; border-radius: 10px; overflow: hidden; margin-bottom: 1rem;">
+                <div style="background: var(--success-color); height: 10px; width: 75%; transition: var(--transition);"></div>
+            </div>
+            <p style="color: var(--text-dark); margin-bottom: 1rem;">Your profile is 75% complete. Add more details to improve your chances!</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <span style="background: var(--success-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">✓ Basic Info</span>
+                <span style="background: var(--success-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">✓ Education</span>
+                <span style="background: var(--warning-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">? Skills</span>
+                <span style="background: var(--danger-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">✗ Resume</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load dashboard data
+            loadDashboardStats();
+            loadRecentApplications();
+            loadRecommendedInternships();
+
+            // Set last login time
+            document.getElementById('lastLogin').textContent = `Last login: ${new Date().toLocaleDateString()}`;
+        });
+
+        // FIXED: Load real user stats from API
+        async function loadDashboardStats() {
+            try {
+                console.log('Loading real dashboard stats...');
+                const response = await fetch('/api/student/stats');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const stats = await response.json();
+                console.log('Received stats:', stats);
+
+                // Animate counters with real data
+                animateCounter('applicationsCount', stats.total_applications || 0);
+                animateCounter('shortlistedCount', stats.shortlisted_count || 0);
+                animateCounter('pendingCount', stats.pending_count || 0);
+                animateCounter('acceptedCount', stats.accepted_count || 0);
+
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+
+                // Fallback to zeros if API fails
+                animateCounter('applicationsCount', 0);
+                animateCounter('shortlistedCount', 0);
+                animateCounter('pendingCount', 0);
+                animateCounter('acceptedCount', 0);
+
+                // Show error message
+                const firstStatCard = document.getElementById('applicationsCount').parentElement;
+                firstStatCard.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                firstStatCard.title = 'Error loading stats - using fallback data';
+            }
+        }
+
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1000; // 1 second
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const currentValue = Math.floor(progress * targetValue);
+
+                element.textContent = currentValue;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        // FIXED: Load real recent applications
+        async function loadRecentApplications() {
+            try {
+                console.log('Loading recent applications...');
+                const response = await fetch('/student/applications');
+
+                if (response.ok) {
+                    const html = await response.text();
+
+                    // Extract just the applications content from the full page
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    // Look for application cards in the response
+                    const applicationCards = tempDiv.querySelectorAll('.internship-card');
+
+                    const recentApplicationsContainer = document.getElementById('recentApplications');
+
+                    if (applicationCards.length > 0) {
+                        // Show only the first 3 recent applications
+                        const recentCards = Array.from(applicationCards).slice(0, 3);
+                        recentApplicationsContainer.innerHTML = '<div style="display: flex; flex-direction: column; gap: 1rem;"></div>';
+
+                        const container = recentApplicationsContainer.firstElementChild;
+                        recentCards.forEach(card => {
+                            // Make the card smaller for dashboard
+                            card.style.cssText += 'padding: 1rem; font-size: 0.9rem;';
+                            container.appendChild(card.cloneNode(true));
+                        });
+                    } else {
+                        // No applications
+                        recentApplicationsContainer.innerHTML = `
+                            <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📭</span>
+                                <p>No applications yet. <a href="/browse_internships" style="color: var(--primary-color);">Start applying now!</a></p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    throw new Error('Failed to load applications');
+                }
+            } catch (error) {
+                console.error('Error loading recent applications:', error);
+                document.getElementById('recentApplications').innerHTML = `
+                    <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⚠️</span>
+                        <p>Unable to load recent applications.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function loadRecommendedInternships() {
+            // Simulate loading recommended internships (you can implement this later)
+            setTimeout(() => {
+                const recommendedHtml = `
+                    <div class="internships-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                        <div class="internship-card">
+                            <h3>UI/UX Design Intern</h3>
+                            <p><strong>Company:</strong> Creative Studios</p>
+                            <p><strong>Location:</strong> Dubai, UAE</p>
+                            <p><strong>Type:</strong> Hybrid</p>
+                            <p><strong>Salary:</strong> $2800 monthly</p>
+                            <p class="description">Work with our design team to create amazing user experiences...</p>
+                            <div class="actions">
+                                <a href="#" class="btn btn-primary">View Details</a>
+                                <a href="#" class="btn btn-success">Apply Now</a>
+                            </div>
+                        </div>
+                        <div class="internship-card">
+                            <h3>Data Science Intern</h3>
+                            <p><strong>Company:</strong> Analytics Pro</p>
+                            <p><strong>Location:</strong> Remote</p>
+                            <p><strong>Type:</strong> Remote</p>
+                            <p><strong>Salary:</strong> $3200 monthly</p>
+                            <p class="description">Join our data team to work on machine learning projects...</p>
+                            <div class="actions">
+                                <a href="#" class="btn btn-primary">View Details</a>
+                                <a href="#" class="btn btn-success">Apply Now</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('recommendedInternships').innerHTML = recommendedHtml;
+            }, 1500);
+        }
+
+        // Add some interactive animations
+        document.querySelectorAll('.dashboard a').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+
+            link.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

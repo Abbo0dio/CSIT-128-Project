@@ -1,1 +1,445 @@
-<h2>Company Dashboard</h2><ul><li><a href='/manage_internships'>Manage Internships</a></li><li><a href='/manage_applications'>Manage Applications</a></li><li><a href='/company/profile'>Company Profile</a></li></ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard - Internship Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Header Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <div>
+                <h2 style="margin: 0; color: var(--primary-color);">🏢 Company Dashboard</h2>
+                <p style="margin: 0; color: var(--text-light);">Manage your internships and find talented candidates</p>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="color: var(--text-light); font-size: 0.9rem;" id="companyName">Loading...</span>
+                <form method="POST" action="/logout" style="margin: 0;">
+                    <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">🚪 Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Company Stats -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="activeInternships">-</div>
+                <div style="opacity: 0.9;">Active Internships</div>
+            </div>
+            <div style="background: linear-gradient(135deg, var(--success-color), #047857); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="totalApplications">-</div>
+                <div style="opacity: 0.9;">Total Applications</div>
+            </div>
+            <div style="background: linear-gradient(135deg, var(--warning-color), #b45309); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="pendingReview">-</div>
+                <div style="opacity: 0.9;">Pending Review</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 1.5rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold;" id="shortlistedCount">-</div>
+                <div style="opacity: 0.9;">Shortlisted</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; text-align: center; color: var(--text-dark);">⚡ Quick Actions</h3>
+            <div class="dashboard">
+                <ul style="margin: 0;">
+                    <li>
+                        <a href="/manage_internships">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">📋</span>
+                                <div>
+                                    <div style="font-weight: 600;">Manage Internships</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Create, edit, and view your listings</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/manage_applications">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">📥</span>
+                                <div>
+                                    <div style="font-weight: 600;">Manage Applications</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Review and respond to candidates</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/company/profile">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">🏢</span>
+                                <div>
+                                    <div style="font-weight: 600;">Company Profile</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Update company information</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/internships/create">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <span style="font-size: 2rem;">➕</span>
+                                <div>
+                                    <div style="font-weight: 600;">Post New Internship</div>
+                                    <div style="font-size: 0.9rem; color: var(--text-light);">Create a new opportunity</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recent Applications -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: var(--text-dark);">📋 Recent Applications</h3>
+                <a href="/manage_applications" class="btn btn-info" style="padding: 0.5rem 1rem;">View All</a>
+            </div>
+            <div id="recentApplications">
+                <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔄</span>
+                    <p>Loading recent applications...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Internships -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: var(--text-dark);">🎯 Your Active Internships</h3>
+                <a href="/internships/create" class="btn btn-primary" style="padding: 0.5rem 1rem;">+ Create New</a>
+            </div>
+            <div id="activeInternshipsList">
+                <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔄</span>
+                    <p>Loading your internships...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; color: var(--text-dark);">📊 Application Analytics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div style="text-align: center;">
+                    <div id="analyticsChart" style="width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(var(--success-color) 0deg, var(--warning-color) 120deg, var(--danger-color) 240deg); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">
+                        Loading...
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.9rem;">
+                            <div style="width: 12px; height: 12px; background: var(--success-color); border-radius: 50%;"></div>
+                            Accepted
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.9rem;">
+                            <div style="width: 12px; height: 12px; background: var(--warning-color); border-radius: 50%;"></div>
+                            Pending
+                        </span>
+                        <span style="display: flex; align-items: center; gap: 0.25rem; font-size: 0.9rem;">
+                            <div style="width: 12px; height: 12px; background: var(--danger-color); border-radius: 50%;"></div>
+                            Rejected
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="color: var(--text-dark); margin-bottom: 1rem;">📈 Application Trends</h4>
+                    <div id="weeklyChart" style="display: flex; justify-content: space-between; align-items: end; height: 100px; gap: 0.5rem;">
+                        <!-- Chart will be generated based on real data -->
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-light);">
+                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div style="background: linear-gradient(135deg, #e0f2fe, #e1f5fe); border: 1px solid var(--primary-color); border-radius: var(--border-radius); padding: 2rem; margin-top: 2rem;">
+            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💡 Tips for Better Hiring</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="background: white; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--success-color);">
+                    <h5 style="color: var(--success-color); margin-bottom: 0.5rem;">Clear Job Descriptions</h5>
+                    <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">Include specific requirements and responsibilities to attract the right candidates.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--warning-color);">
+                    <h5 style="color: var(--warning-color); margin-bottom: 0.5rem;">Quick Response Time</h5>
+                    <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">Respond to applications within 3-5 business days to maintain candidate interest.</p>
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: var(--border-radius); border-left: 4px solid var(--primary-color);">
+                    <h5 style="color: var(--primary-color); margin-bottom: 0.5rem;">Competitive Benefits</h5>
+                    <p style="margin: 0; font-size: 0.9rem; color: var(--text-light);">Offer competitive compensation and learning opportunities to attract top talent.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load dashboard data
+            loadCompanyStats();
+            loadRecentApplications();
+            loadActiveInternships();
+            loadCompanyName();
+        });
+
+        // FIXED: Load real company stats from API
+        async function loadCompanyStats() {
+            try {
+                console.log('Loading real company stats...');
+                const response = await fetch('/api/company/stats');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const stats = await response.json();
+                console.log('Received company stats:', stats);
+
+                // Animate counters with real data
+                animateCounter('activeInternships', stats.active_internships || 0);
+                animateCounter('totalApplications', stats.total_applications || 0);
+                animateCounter('pendingReview', stats.pending_applications || 0);
+                animateCounter('shortlistedCount', stats.shortlisted_applications || 0);
+
+                // Update analytics chart with real data
+                updateAnalyticsChart(stats);
+
+            } catch (error) {
+                console.error('Error loading company stats:', error);
+
+                // Fallback to zeros if API fails
+                animateCounter('activeInternships', 0);
+                animateCounter('totalApplications', 0);
+                animateCounter('pendingReview', 0);
+                animateCounter('shortlistedCount', 0);
+
+                // Show error message
+                const firstStatCard = document.getElementById('activeInternships').parentElement;
+                firstStatCard.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                firstStatCard.title = 'Error loading stats - using fallback data';
+            }
+        }
+
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function updateCounter(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const currentValue = Math.floor(progress * targetValue);
+
+                element.textContent = currentValue;
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+
+            requestAnimationFrame(updateCounter);
+        }
+
+        function updateAnalyticsChart(stats) {
+            const chart = document.getElementById('analyticsChart');
+            const total = stats.total_applications || 0;
+
+            if (total === 0) {
+                chart.style.background = '#e5e7eb';
+                chart.textContent = 'No Data';
+                chart.style.color = '#6b7280';
+                return;
+            }
+
+            // Calculate percentages for the pie chart
+            const pending = (stats.pending_applications || 0) / total * 360;
+            const shortlisted = (stats.shortlisted_applications || 0) / total * 360;
+            const accepted = ((stats.accepted_applications || 0) / total) * 360;
+            const rejected = 360 - pending - shortlisted - accepted;
+
+            // Create conic gradient
+            let gradientStops = [];
+            let currentDegree = 0;
+
+            if (pending > 0) {
+                gradientStops.push(`var(--warning-color) ${currentDegree}deg ${currentDegree + pending}deg`);
+                currentDegree += pending;
+            }
+            if (shortlisted > 0) {
+                gradientStops.push(`#6366f1 ${currentDegree}deg ${currentDegree + shortlisted}deg`);
+                currentDegree += shortlisted;
+            }
+            if (accepted > 0) {
+                gradientStops.push(`var(--success-color) ${currentDegree}deg ${currentDegree + accepted}deg`);
+                currentDegree += accepted;
+            }
+            if (rejected > 0) {
+                gradientStops.push(`var(--danger-color) ${currentDegree}deg 360deg`);
+            }
+
+            chart.style.background = `conic-gradient(${gradientStops.join(', ')})`;
+            chart.textContent = total;
+        }
+
+        // FIXED: Load real recent applications
+        async function loadRecentApplications() {
+            try {
+                console.log('Loading recent applications...');
+                const response = await fetch('/manage_applications');
+
+                if (response.ok) {
+                    const html = await response.text();
+
+                    // Extract applications from the full page
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    const applicationCards = tempDiv.querySelectorAll('.internship-card');
+                    const recentApplicationsContainer = document.getElementById('recentApplications');
+
+                    if (applicationCards.length > 0) {
+                        // Show only the first 3 recent applications
+                        const recentCards = Array.from(applicationCards).slice(0, 3);
+                        recentApplicationsContainer.innerHTML = '<div style="display: flex; flex-direction: column; gap: 1rem;"></div>';
+
+                        const container = recentApplicationsContainer.firstElementChild;
+                        recentCards.forEach(card => {
+                            // Simplify the card for dashboard display
+                            const simplifiedCard = document.createElement('div');
+                            simplifiedCard.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--light-bg); border-radius: var(--border-radius); border-left: 4px solid var(--primary-color);';
+
+                            // Extract key info
+                            const h3 = card.querySelector('h3');
+                            const applicationFor = card.querySelector('p strong');
+                            const status = card.querySelector('.status');
+
+                            simplifiedCard.innerHTML = `
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0; color: var(--text-dark);">${h3 ? h3.textContent : 'Unknown Applicant'}</h4>
+                                    <p style="margin: 0; color: var(--text-light); font-size: 0.9rem;">${applicationFor ? applicationFor.parentElement.textContent : 'Application'}</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    ${status ? status.outerHTML : '<span class="status status-pending">pending</span>'}
+                                    <button class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="window.location.href='/manage_applications'">Review</button>
+                                </div>
+                            `;
+
+                            container.appendChild(simplifiedCard);
+                        });
+                    } else {
+                        // No applications
+                        recentApplicationsContainer.innerHTML = `
+                            <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📭</span>
+                                <p>No applications received yet. <a href="/internships/create" style="color: var(--primary-color);">Create your first internship!</a></p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    throw new Error('Failed to load applications');
+                }
+            } catch (error) {
+                console.error('Error loading recent applications:', error);
+                document.getElementById('recentApplications').innerHTML = `
+                    <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⚠️</span>
+                        <p>Unable to load recent applications.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // FIXED: Load real active internships
+        async function loadActiveInternships() {
+            try {
+                console.log('Loading active internships...');
+                const response = await fetch('/manage_internships');
+
+                if (response.ok) {
+                    const html = await response.text();
+
+                    // Extract internships from the full page
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = html;
+
+                    const internshipCards = tempDiv.querySelectorAll('.internship-card');
+                    const activeInternshipsContainer = document.getElementById('activeInternshipsList');
+
+                    if (internshipCards.length > 0) {
+                        activeInternshipsContainer.innerHTML = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;"></div>';
+
+                        const container = activeInternshipsContainer.firstElementChild;
+                        Array.from(internshipCards).slice(0, 4).forEach(card => {
+                            // Create a simplified card for dashboard
+                            const simplifiedCard = document.createElement('div');
+                            simplifiedCard.style.cssText = 'border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.5rem; background: var(--light-bg);';
+
+                            const h3 = card.querySelector('h3');
+                            const location = card.querySelector('p:nth-of-type(1)');
+                            const salary = card.querySelector('p:nth-of-type(3)');
+                            const status = card.querySelector('p:nth-of-type(4)');
+
+                            simplifiedCard.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                                    <h4 style="margin: 0; color: var(--primary-color); flex: 1;">${h3 ? h3.textContent : 'Internship'}</h4>
+                                    <span class="status status-active">Active</span>
+                                </div>
+                                <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">${location ? location.textContent.replace('Location:', '').trim() : 'Location not specified'}</p>
+                                <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">${salary ? salary.textContent : 'Salary not specified'}</p>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="btn btn-info" style="padding: 0.5rem 1rem; font-size: 0.8rem; flex: 1;" onclick="window.location.href='/manage_applications'">View Applications</button>
+                                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="window.location.href='/manage_internships'">Edit</button>
+                                </div>
+                            `;
+
+                            container.appendChild(simplifiedCard);
+                        });
+                    } else {
+                        // No internships
+                        activeInternshipsContainer.innerHTML = `
+                            <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📝</span>
+                                <p>No internships posted yet. <a href="/internships/create" style="color: var(--primary-color);">Create your first internship!</a></p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    throw new Error('Failed to load internships');
+                }
+            } catch (error) {
+                console.error('Error loading active internships:', error);
+                document.getElementById('activeInternshipsList').innerHTML = `
+                    <div style="text-align: center; color: var(--text-light); padding: 2rem;">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⚠️</span>
+                        <p>Unable to load internships.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadCompanyName() {
+            // Try to get company name from session or API
+            // For now, show a generic name
+            document.getElementById('companyName').textContent = 'Your Company';
+        }
+
+        // Add interactive animations
+        document.querySelectorAll('.dashboard a').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+
+            link.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Internship - Company Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">✨ Create New Internship Opportunity</h2>
+            <p style="color: var(--text-light); margin-bottom: 0;">Post an internship to attract talented students to your company</p>
+        </div>
+
+        <form method="POST" action="/internships/create" id="createInternshipForm" novalidate>
+            <div id="alertContainer"></div>
+
+            <!-- Basic Information -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">📋 Basic Information</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="title" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">🎯 Internship Title *</label>
+                        <input type="text" name="title" id="title" required
+                               placeholder="e.g., Frontend Developer Intern"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="titleError"></div>
+                    </div>
+
+                    <div>
+                        <label for="positions" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">👥 Number of Positions *</label>
+                        <input type="number" name="positions_available" id="positions" required min="1" max="10" value="1"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="positionsError"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">📝 Job Description *</label>
+                    <textarea name="description" id="description" required rows="4"
+                              placeholder="Describe the internship role, what the intern will do, learning opportunities, etc."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="descriptionError"></div>
+                    <div style="text-align: right; font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">
+                        <span id="descriptionCount">0</span>/500 characters
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location and Type -->
+            <div style="background: white; padding: 2rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--success-color); padding-bottom: 0.5rem;">📍 Location & Work Type</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="location" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">🌍 Location *</label>
+                        <input type="text" name="location" id="location" required
+                               placeholder="e.g., Dubai, UAE"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="locationError"></div>
+                    </div>
+
+                    <div>
+                        <label for="type" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💼 Work Type *</label>
+                        <select name="type" id="type" required
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                            <option value="">Select work type</option>
+                            <option value="on-site">🏢 On-site</option>
+                            <option value="remote">🏠 Remote</option>
+                            <option value="hybrid">🔄 Hybrid</option>
+                        </select>
+                        <div class="error-message" id="typeError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duration and Compensation -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--warning-color); padding-bottom: 0.5rem;">⏰ Duration & Compensation</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="duration" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">📅 Duration *</label>
+                        <input type="text" name="duration" id="duration" required
+                               placeholder="e.g., 3 months, 6 months"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="durationError"></div>
+                    </div>
+
+                    <div>
+                        <label for="salary" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💰 Salary/Stipend *</label>
+                        <input type="number" name="salary" id="salary" required min="0" step="100"
+                               placeholder="3000"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="salaryError"></div>
+                    </div>
+
+                    <div>
+                        <label for="salaryType" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💵 Payment Type *</label>
+                        <select name="salary_type" id="salaryType" required
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                            <option value="">Select type</option>
+                            <option value="hourly">💰 Per Hour</option>
+                            <option value="monthly">📅 Monthly</option>
+                            <option value="stipend">🎁 Stipend</option>
+                            <option value="unpaid">📚 Unpaid (Academic Credit)</option>
+                        </select>
+                        <div class="error-message" id="salaryTypeError"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="startDate" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">🚀 Start Date</label>
+                        <input type="date" name="start_date" id="startDate"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="startDateError"></div>
+                    </div>
+
+                    <div>
+                        <label for="deadline" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">⏰ Application Deadline *</label>
+                        <input type="date" name="application_deadline" id="deadline" required
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="deadlineError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requirements and Skills -->
+            <div style="background: white; padding: 2rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">🎓 Requirements & Skills</h3>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="requiredSkills" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">💻 Required Skills *</label>
+                    <input type="text" name="required_skills" id="requiredSkills" required
+                           placeholder="e.g., JavaScript, React, HTML, CSS, Git (separate with commas)"
+                           style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                    <div class="error-message" id="requiredSkillsError"></div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">
+                        💡 Separate skills with commas (e.g., JavaScript, React, Node.js)
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="qualifications" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">🎯 Qualifications & Requirements</label>
+                    <textarea name="qualifications" id="qualifications" rows="3"
+                              placeholder="Educational requirements, experience level, specific certifications, etc."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="qualificationsError"></div>
+                </div>
+
+                <div>
+                    <label for="responsibilities" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">📋 Key Responsibilities</label>
+                    <textarea name="responsibilities" id="responsibilities" rows="4"
+                              placeholder="List the main tasks and responsibilities the intern will have..."
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="responsibilitiesError"></div>
+                </div>
+            </div>
+
+            <!-- Status and Actions -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--success-color); padding-bottom: 0.5rem;">📊 Publication Settings</h3>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="status" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">📢 Status</label>
+                    <select name="status" id="status"
+                            style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <option value="active">🟢 Active (Visible to students)</option>
+                        <option value="inactive">🟡 Draft (Save for later)</option>
+                    </select>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">
+                        💡 You can save as draft and publish later, or make it active immediately
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        <span id="btnText">✨ Create Internship</span>
+                        <span id="btnLoader" style="display: none;">⏳ Creating...</span>
+                    </button>
+                    <button type="button" onclick="saveDraft()" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        💾 Save as Draft
+                    </button>
+                    <a href="/company/dashboard" class="btn btn-info" style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none;">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Preview Section -->
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-top: 2rem;">
+            <h3 style="color: var(--text-dark); margin-bottom: 1rem;">👁️ Live Preview</h3>
+            <div id="internshipPreview" style="border: 2px dashed var(--border-color); border-radius: var(--border-radius); padding: 2rem; background: var(--light-bg);">
+                <p style="text-align: center; color: var(--text-light);">Fill out the form above to see a preview of your internship listing</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input-error {
+            border-color: var(--danger-color) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+        }
+
+        .input-success {
+            border-color: var(--success-color) !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFormValidation();
+            setupLivePreview();
+            setMinDates();
+        });
+
+        function setupFormValidation() {
+            const form = document.getElementById('createInternshipForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Real-time validation
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', () => {
+                    clearFieldError(input);
+                    updateLivePreview();
+                });
+            });
+
+            // Character counter for description
+            const description = document.getElementById('description');
+            const descriptionCount = document.getElementById('descriptionCount');
+            description.addEventListener('input', function() {
+                const count = this.value.length;
+                descriptionCount.textContent = count;
+
+                if (count > 500) {
+                    descriptionCount.style.color = 'var(--danger-color)';
+                } else if (count > 400) {
+                    descriptionCount.style.color = 'var(--warning-color)';
+                } else {
+                    descriptionCount.style.color = 'var(--text-light)';
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        function validateField(field) {
+            const value = field.value.trim();
+            const fieldName = field.name;
+            const errorElement = document.getElementById(fieldName.replace('_', '') + 'Error') ||
+                                document.getElementById(field.id + 'Error');
+
+            if (!errorElement) return true;
+
+            // Required field validation
+            if (field.required && !value) {
+                showFieldError(field, errorElement, `${getFieldLabel(field)} is required`);
+                return false;
+            }
+
+            // Specific validations
+            switch (fieldName) {
+                case 'title':
+                    if (value.length < 3) {
+                        showFieldError(field, errorElement, 'Title must be at least 3 characters');
+                        return false;
+                    }
+                    break;
+
+                case 'description':
+                    if (value.length < 20) {
+                        showFieldError(field, errorElement, 'Description must be at least 20 characters');
+                        return false;
+                    }
+                    if (value.length > 500) {
+                        showFieldError(field, errorElement, 'Description must be less than 500 characters');
+                        return false;
+                    }
+                    break;
+
+                case 'salary':
+                    if (value && (isNaN(value) || parseFloat(value) < 0)) {
+                        showFieldError(field, errorElement, 'Please enter a valid salary amount');
+                        return false;
+                    }
+                    break;
+
+                case 'application_deadline':
+                    if (value && new Date(value) <= new Date()) {
+                        showFieldError(field, errorElement, 'Deadline must be in the future');
+                        return false;
+                    }
+                    break;
+
+                case 'start_date':
+                    const deadline = document.getElementById('deadline').value;
+                    if (value && deadline && new Date(value) <= new Date(deadline)) {
+                        showFieldError(field, errorElement, 'Start date should be after application deadline');
+                        return false;
+                    }
+                    break;
+            }
+
+            showFieldSuccess(field, errorElement);
+            return true;
+        }
+
+        function showFieldError(field, errorElement, message) {
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+            field.classList.add('input-error');
+            field.classList.remove('input-success');
+        }
+
+        function showFieldSuccess(field, errorElement) {
+            errorElement.classList.remove('show');
+            field.classList.remove('input-error');
+            field.classList.add('input-success');
+        }
+
+        function clearFieldError(field) {
+            const errorElement = document.getElementById(field.name.replace('_', '') + 'Error') ||
+                                document.getElementById(field.id + 'Error');
+            if (errorElement && field.value.trim()) {
+                errorElement.classList.remove('show');
+                field.classList.remove('input-error');
+            }
+        }
+
+        function getFieldLabel(field) {
+            const label = document.querySelector(`label[for="${field.id}"]`);
+            return label ? label.textContent.replace('*', '').trim() : field.name;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            // Validate all fields
+            const form = e.target;
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                showAlert('Please fix the errors above before submitting', 'error');
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline';
+
+            // Submit form
+            const formData = new FormData(form);
+
+            // Simulate API call
+            setTimeout(() => {
+                showAlert('Internship created successfully! Students can now view and apply for this position.', 'success');
+
+                // Reset form or redirect
+                setTimeout(() => {
+                    window.location.href = '/manage_internships';
+                }, 2000);
+
+            }, 1500);
+        }
+
+        function saveDraft() {
+            const form = document.getElementById('createInternshipForm');
+            const statusField = document.getElementById('status');
+            statusField.value = 'inactive';
+
+            showAlert('Internship saved as draft. You can publish it later from your dashboard.', 'success');
+
+            // You would handle the actual save here
+            setTimeout(() => {
+                window.location.href = '/manage_internships';
+            }, 2000);
+        }
+
+        function setupLivePreview() {
+            updateLivePreview();
+        }
+
+        function updateLivePreview() {
+            const preview = document.getElementById('internshipPreview');
+            const title = document.getElementById('title').value || 'Internship Title';
+            const location = document.getElementById('location').value || 'Location';
+            const type = document.getElementById('type').value || 'work-type';
+            const salary = document.getElementById('salary').value || '0';
+            const salaryType = document.getElementById('salaryType').value || 'monthly';
+            const description = document.getElementById('description').value || 'Job description will appear here...';
+            const skills = document.getElementById('requiredSkills').value || 'Required skills';
+
+            const previewHtml = `
+                <div style="border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 1.5rem; background: white;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">${title}</h3>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;">🏢 Your Company Name</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem;">
+                        <div>📍 ${location}</div>
+                        <div>💼 ${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                        <div>💰 $${salary}/${salaryType}</div>
+                    </div>
+
+                    <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">
+                        ${description.substring(0, 120)}${description.length > 120 ? '...' : ''}
+                    </p>
+
+                    <div style="margin-bottom: 1rem;">
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.5rem;">Required Skills:</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+                            ${skills ? skills.split(',').map(skill =>
+                                `<span style="background: var(--light-bg); color: var(--primary-color); padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem;">${skill.trim()}</span>`
+                            ).join('') : '<span style="color: var(--text-light);">Skills will appear here</span>'}
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn btn-info" style="flex: 1; padding: 0.5rem;" disabled>View Details</button>
+                        <button class="btn btn-success" style="flex: 1; padding: 0.5rem;" disabled>Apply Now</button>
+                    </div>
+                </div>
+            `;
+
+            preview.innerHTML = previewHtml;
+        }
+
+        function setMinDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+
+            const deadlineInput = document.getElementById('deadline');
+            const startDateInput = document.getElementById('startDate');
+
+            deadlineInput.min = tomorrow.toISOString().split('T')[0];
+            startDateInput.min = tomorrow.toISOString().split('T')[0];
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+
+            // Scroll to top to show alert
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,1 +1,514 @@
-<h2>Student Profile</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Student Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+            <div>
+                <h2 style="margin: 0; color: var(--primary-color);">👤 My Profile</h2>
+                <p style="margin: 0; color: var(--text-light);">Manage your professional information and preferences</p>
+            </div>
+            <div>
+                <a href="/student/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+            </div>
+        </div>
+
+        <!-- Profile Completion Progress -->
+        <div style="background: linear-gradient(135deg, #e0f2fe, #e1f5fe); border: 1px solid var(--primary-color); border-radius: var(--border-radius); padding: 1.5rem; margin-bottom: 2rem;">
+            <h4 style="color: var(--primary-color); margin-bottom: 1rem;">📊 Profile Completion: <span id="completionPercentage">75%</span></h4>
+            <div style="background: white; border-radius: 10px; overflow: hidden; margin-bottom: 1rem;">
+                <div id="progressBar" style="background: var(--success-color); height: 8px; width: 75%; transition: var(--transition);"></div>
+            </div>
+            <p style="color: var(--text-dark); margin: 0; font-size: 0.9rem;">Complete your profile to increase your chances of getting hired!</p>
+        </div>
+
+        <form id="studentProfileForm" method="POST" action="/student/profile/update" enctype="multipart/form-data" novalidate>
+            <div id="alertContainer"></div>
+
+            <!-- Personal Information -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">👨‍🎓 Personal Information</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="firstName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">First Name *</label>
+                        <input type="text" name="first_name" id="firstName" required
+                               placeholder="Your first name"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+
+                    <div>
+                        <label for="lastName" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Last Name *</label>
+                        <input type="text" name="last_name" id="lastName" required
+                               placeholder="Your last name"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="dateOfBirth" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Date of Birth</label>
+                        <input type="date" name="date_of_birth" id="dateOfBirth"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="dateOfBirthError"></div>
+                    </div>
+
+                    <div>
+                        <label for="phone" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Phone Number</label>
+                        <input type="tel" name="phone" id="phone" data-phone
+                               placeholder="+971 50 123 4567"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="address" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Address</label>
+                    <textarea name="address" id="address" rows="2"
+                              placeholder="Your current address"
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="addressError"></div>
+                </div>
+            </div>
+
+            <!-- Education Information -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--success-color); padding-bottom: 0.5rem;">🎓 Education</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label for="university" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">University/Institution *</label>
+                        <input type="text" name="university" id="university" required
+                               placeholder="e.g., University of Wollongong in Dubai"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="universityError"></div>
+                    </div>
+
+                    <div>
+                        <label for="major" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Major/Field of Study *</label>
+                        <input type="text" name="major" id="major" required
+                               placeholder="e.g., Computer Science"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="majorError"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="yearOfStudy" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Year of Study *</label>
+                        <select name="year_of_study" id="yearOfStudy" required
+                                style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                            <option value="">Select year</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                            <option value="Graduate">Graduate</option>
+                        </select>
+                        <div class="error-message" id="yearOfStudyError"></div>
+                    </div>
+
+                    <div>
+                        <label for="gpa" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">GPA (Optional)</label>
+                        <input type="number" name="gpa" id="gpa" step="0.01" min="0" max="4.0"
+                               placeholder="e.g., 3.75"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="gpaError"></div>
+                        <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">Scale: 0.0 - 4.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills and Experience -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--warning-color); padding-bottom: 0.5rem;">💻 Skills & Experience</h3>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="skills" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Technical Skills *</label>
+                    <textarea name="skills" id="skills" rows="3" required
+                              placeholder="List your technical skills (e.g., JavaScript, Python, React, Node.js, MySQL, Git)"
+                              style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius); resize: vertical;"></textarea>
+                    <div class="error-message" id="skillsError"></div>
+                    <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">💡 Separate skills with commas for better readability</div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="portfolioUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Portfolio Website</label>
+                        <input type="url" name="portfolio_url" id="portfolioUrl" data-url
+                               placeholder="https://yourportfolio.com"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="portfolioUrlError"></div>
+                    </div>
+
+                    <div>
+                        <label for="linkedinUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">LinkedIn Profile</label>
+                        <input type="url" name="linkedin_url" id="linkedinUrl" data-url
+                               placeholder="https://linkedin.com/in/yourprofile"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="linkedinUrlError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resume Upload -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem;">📄 Resume</h3>
+
+                <div style="border: 2px dashed var(--border-color); border-radius: var(--border-radius); padding: 2rem; text-align: center; background: white;">
+                    <div id="resumeUploadArea">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem; color: var(--text-light);">📎</span>
+                        <h4 style="color: var(--text-dark); margin-bottom: 1rem;">Upload Your Resume</h4>
+                        <p style="color: var(--text-light); margin-bottom: 1.5rem;">PDF files only, max 5MB</p>
+
+                        <input type="file" name="resume" id="resumeFile" accept=".pdf"
+                               style="display: none;" onchange="handleResumeUpload(event)">
+
+                        <button type="button" onclick="document.getElementById('resumeFile').click()"
+                                class="btn btn-primary" style="margin-bottom: 1rem;">
+                            Choose File
+                        </button>
+
+                        <div id="currentResume" style="display: none; background: var(--light-bg); padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                            <p style="margin: 0; color: var(--success-color); font-weight: 500;">✓ Current Resume: <span id="resumeFileName"></span></p>
+                            <div style="margin-top: 0.5rem;">
+                                <button type="button" onclick="viewResume()" class="btn btn-info" style="padding: 0.5rem 1rem; font-size: 0.8rem;">View</button>
+                                <button type="button" onclick="removeResume()" class="btn btn-danger" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Remove</button>
+                            </div>
+                        </div>
+
+                        <div id="newResumePreview" style="display: none; background: var(--success-color); color: white; padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                            <p style="margin: 0; font-weight: 500;">✓ New Resume Selected: <span id="newResumeFileName"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Links -->
+            <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--border-radius); padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; border-bottom: 2px solid var(--info-color, #0ea5e9); padding-bottom: 0.5rem;">🔗 Additional Links</h3>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <label for="githubUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">GitHub Profile</label>
+                        <input type="url" name="github_url" id="githubUrl" data-url
+                               placeholder="https://github.com/yourusername"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="githubUrlError"></div>
+                    </div>
+
+                    <div>
+                        <label for="websiteUrl" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Personal Website</label>
+                        <input type="url" name="website_url" id="websiteUrl" data-url
+                               placeholder="https://yourwebsite.com"
+                               style="width: 100%; padding: 0.75rem; border: 2px solid var(--border-color); border-radius: var(--border-radius);">
+                        <div class="error-message" id="websiteUrlError"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="background: var(--light-bg); padding: 2rem; border-radius: var(--border-radius); text-align: center;">
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button type="submit" id="saveBtn" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        <span id="saveBtnText">💾 Save Profile</span>
+                        <span id="saveBtnLoader" style="display: none;">⏳ Saving...</span>
+                    </button>
+                    <button type="button" onclick="previewProfile()" class="btn btn-info" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        👁️ Preview Profile
+                    </button>
+                    <a href="/student/dashboard" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem; text-decoration: none;">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <!-- Profile Preview Modal -->
+        <div id="profilePreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;">
+            <div style="background: white; margin: 2rem auto; max-width: 800px; border-radius: var(--border-radius); position: relative;">
+                <div style="padding: 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0; color: var(--primary-color);">👁️ Profile Preview</h3>
+                    <button onclick="closePreview()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+                </div>
+                <div id="profilePreviewContent" style="padding: 2rem;">
+                    <!-- Profile preview content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input-error {
+            border-color: var(--danger-color) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+        }
+
+        .input-success {
+            border-color: var(--success-color) !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+    </style>
+
+    <script src="/js/form-validation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form validation
+            FormValidator.init('studentProfileForm');
+
+            // Load existing profile data
+            loadProfileData();
+
+            // Calculate initial completion percentage
+            updateProfileCompletion();
+
+            // Add event listeners for profile completion tracking
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', updateProfileCompletion);
+            });
+        });
+
+        function loadProfileData() {
+            // Simulate loading existing profile data
+            // In real implementation, this would fetch from your API
+            const sampleData = {
+                first_name: 'John',
+                last_name: 'Doe',
+                university: 'University of Wollongong in Dubai',
+                major: 'Computer Science',
+                year_of_study: '3rd Year',
+                gpa: '3.75',
+                skills: 'JavaScript, Python, React, Node.js, MySQL, Git',
+                phone: '+971501234567'
+            };
+
+            // Populate form fields
+            Object.keys(sampleData).forEach(key => {
+                const field = document.querySelector(`[name="${key}"]`);
+                if (field) {
+                    field.value = sampleData[key];
+                }
+            });
+
+            // Show current resume if exists
+            const currentResume = document.getElementById('currentResume');
+            const resumeFileName = document.getElementById('resumeFileName');
+            if (sampleData.resume_url) {
+                resumeFileName.textContent = 'resume_john_doe.pdf';
+                currentResume.style.display = 'block';
+            }
+        }
+
+        function updateProfileCompletion() {
+            const requiredFields = [
+                'first_name', 'last_name', 'university', 'major', 'year_of_study', 'skills'
+            ];
+            const optionalFields = [
+                'phone', 'address', 'gpa', 'portfolio_url', 'linkedin_url', 'github_url'
+            ];
+
+            let completedRequired = 0;
+            let completedOptional = 0;
+
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (input && input.value.trim()) {
+                    completedRequired++;
+                }
+            });
+
+            optionalFields.forEach(field => {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (input && input.value.trim()) {
+                    completedOptional++;
+                }
+            });
+
+            // Calculate percentage: required fields are 70%, optional are 30%
+            const requiredPercentage = (completedRequired / requiredFields.length) * 70;
+            const optionalPercentage = (completedOptional / optionalFields.length) * 30;
+            const totalPercentage = Math.round(requiredPercentage + optionalPercentage);
+
+            // Update UI
+            const progressBar = document.getElementById('progressBar');
+            const completionText = document.getElementById('completionPercentage');
+
+            progressBar.style.width = totalPercentage + '%';
+            completionText.textContent = totalPercentage + '%';
+
+            // Change color based on completion
+            if (totalPercentage >= 80) {
+                progressBar.style.background = 'var(--success-color)';
+            } else if (totalPercentage >= 50) {
+                progressBar.style.background = 'var(--warning-color)';
+            } else {
+                progressBar.style.background = 'var(--danger-color)';
+            }
+        }
+
+        function handleResumeUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file
+            const validation = ValidationUtils.validateFile(file, {
+                maxSize: 5 * 1024 * 1024, // 5MB
+                allowedTypes: ['application/pdf']
+            });
+
+            if (!validation.isValid) {
+                alert('Error: ' + validation.errors.join(', '));
+                event.target.value = '';
+                return;
+            }
+
+            // Show preview
+            const newResumePreview = document.getElementById('newResumePreview');
+            const newResumeFileName = document.getElementById('newResumeFileName');
+
+            newResumeFileName.textContent = file.name;
+            newResumePreview.style.display = 'block';
+
+            // Hide current resume display
+            document.getElementById('currentResume').style.display = 'none';
+        }
+
+        function viewResume() {
+            // In real implementation, this would open the current resume
+            alert('Opening current resume...');
+        }
+
+        function removeResume() {
+            if (confirm('Are you sure you want to remove your current resume?')) {
+                document.getElementById('currentResume').style.display = 'none';
+                document.getElementById('resumeFile').value = '';
+                // In real implementation, you would also update the server
+            }
+        }
+
+        function previewProfile() {
+            const modal = document.getElementById('profilePreviewModal');
+            const content = document.getElementById('profilePreviewContent');
+
+            // Generate profile preview
+            const firstName = document.getElementById('firstName').value || 'John';
+            const lastName = document.getElementById('lastName').value || 'Doe';
+            const university = document.getElementById('university').value || 'University';
+            const major = document.getElementById('major').value || 'Major';
+            const year = document.getElementById('yearOfStudy').value || 'Year';
+            const skills = document.getElementById('skills').value || 'Skills not specified';
+            const gpa = document.getElementById('gpa').value;
+
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem; padding: 2rem; background: var(--light-bg); border-radius: var(--border-radius);">
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--primary-color); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        ${firstName.charAt(0)}${lastName.charAt(0)}
+                    </div>
+                    <h2 style="margin: 0; color: var(--text-dark);">${firstName} ${lastName}</h2>
+                    <p style="color: var(--text-light); margin: 0.5rem 0;">${major} Student</p>
+                    <p style="color: var(--text-light); margin: 0;">${university}</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">📚 Education</h4>
+                        <p><strong>University:</strong> ${university}</p>
+                        <p><strong>Major:</strong> ${major}</p>
+                        <p><strong>Year:</strong> ${year}</p>
+                        ${gpa ? `<p><strong>GPA:</strong> ${gpa}/4.0</p>` : ''}
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--primary-color); margin-bottom: 1rem;">💻 Skills</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            ${skills.split(',').map(skill =>
+                                `<span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 15px; font-size: 0.8rem;">${skill.trim()}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <p style="color: var(--text-light); font-style: italic;">This is how your profile will appear to potential employers</p>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closePreview() {
+            document.getElementById('profilePreviewModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('profilePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePreview();
+            }
+        });
+
+        // Handle form submission
+        document.getElementById('studentProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const saveBtn = document.getElementById('saveBtn');
+            const saveBtnText = document.getElementById('saveBtnText');
+            const saveBtnLoader = document.getElementById('saveBtnLoader');
+
+            // Show loading state
+            saveBtn.disabled = true;
+            saveBtnText.style.display = 'none';
+            saveBtnLoader.style.display = 'inline';
+
+            // Simulate save process
+            setTimeout(() => {
+                showAlert('Profile updated successfully! Your information has been saved.', 'success');
+
+                // Reset button state
+                saveBtn.disabled = false;
+                saveBtnText.style.display = 'inline';
+                saveBtnLoader.style.display = 'none';
+
+                updateProfileCompletion();
+            }, 1500);
+        });
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,25 +1,275 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login</title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Internship Portal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h2>Login</h2>
-  <form method="POST" action="/login">
-    <table>
-      <tr>
-        <td>Email:</td>
-        <td><input type="email" name="email" required></td>
-      </tr>
-      <tr>
-        <td>Password:</td>
-        <td><input type="password" name="password" required></td>
-      </tr>
-      <tr>
-        <td colspan="2"><button type="submit">Login</button></td>
-      </tr>
-    </table>
-  </form>
+    <div class="container fade-in">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2>🔑 Welcome Back!</h2>
+            <p style="color: var(--text-light); margin-bottom: 0;">Sign in to your account to continue</p>
+        </div>
+
+        <form method="POST" action="/login" id="loginForm" novalidate>
+            <div id="alertContainer"></div>
+
+            <table>
+                <tr>
+                    <td><label for="email">📧 Email:</label></td>
+                    <td>
+                        <input type="email" name="email" id="email" required
+                               placeholder="your.email@example.com"
+                               autocomplete="email">
+                        <div class="error-message" id="emailError"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="password">🔒 Password:</label></td>
+                    <td>
+                        <input type="password" name="password" id="password" required
+                               placeholder="Enter your password"
+                               autocomplete="current-password">
+                        <div class="error-message" id="passwordError"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center; padding-top: 1rem;">
+                        <button type="submit" id="loginBtn">
+                            <span id="btnText">🚀 Sign In</span>
+                            <span id="btnLoader" style="display: none;">⏳ Signing in...</span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--text-light); margin-bottom: 1rem;">Don't have an account?</p>
+                <a href="/signup" class="btn btn-secondary">✨ Create New Account</a>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem;">
+                <a href="/" style="color: var(--text-light); text-decoration: none; font-size: 0.9rem;">
+                    ← Back to Home
+                </a>
+            </div>
+        </form>
+
+        <!-- Demo credentials info -->
+        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: var(--border-radius); margin-top: 2rem; border-left: 4px solid var(--primary-color);">
+            <h4 style="margin-bottom: 1rem; color: var(--primary-color);">🧪 Demo Credentials</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                <div>
+                    <strong>Company Account:</strong><br>
+                    Email: admin@techcorp.com<br>
+                    Password: demo123
+                </div>
+                <div>
+                    <strong>Student Account:</strong><br>
+                    Email: john.doe@student.edu<br>
+                    Password: demo123
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input-error {
+            border-color: var(--danger-color) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+        }
+
+        .input-success {
+            border-color: var(--success-color) !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1) !important;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+            const alertContainer = document.getElementById('alertContainer');
+
+            // Real-time validation
+            emailInput.addEventListener('blur', validateEmail);
+            emailInput.addEventListener('input', clearEmailError);
+            passwordInput.addEventListener('blur', validatePassword);
+            passwordInput.addEventListener('input', clearPasswordError);
+
+            function validateEmail() {
+                const email = emailInput.value.trim();
+                const emailError = document.getElementById('emailError');
+
+                if (!email) {
+                    showError(emailInput, emailError, 'Email is required');
+                    return false;
+                } else if (!isValidEmail(email)) {
+                    showError(emailInput, emailError, 'Please enter a valid email address');
+                    return false;
+                } else {
+                    showSuccess(emailInput, emailError);
+                    return true;
+                }
+            }
+
+            function validatePassword() {
+                const password = passwordInput.value;
+                const passwordError = document.getElementById('passwordError');
+
+                if (!password) {
+                    showError(passwordInput, passwordError, 'Password is required');
+                    return false;
+                } else if (password.length < 6) {
+                    showError(passwordInput, passwordError, 'Password must be at least 6 characters');
+                    return false;
+                } else {
+                    showSuccess(passwordInput, passwordError);
+                    return true;
+                }
+            }
+
+            function clearEmailError() {
+                const emailError = document.getElementById('emailError');
+                if (emailInput.value.trim()) {
+                    emailError.classList.remove('show');
+                    emailInput.classList.remove('input-error');
+                }
+            }
+
+            function clearPasswordError() {
+                const passwordError = document.getElementById('passwordError');
+                if (passwordInput.value) {
+                    passwordError.classList.remove('show');
+                    passwordInput.classList.remove('input-error');
+                }
+            }
+
+            function showError(input, errorElement, message) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+                input.classList.add('input-error');
+                input.classList.remove('input-success');
+            }
+
+            function showSuccess(input, errorElement) {
+                errorElement.classList.remove('show');
+                input.classList.remove('input-error');
+                input.classList.add('input-success');
+            }
+
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function showAlert(message, type = 'error') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+
+                alertContainer.innerHTML = '';
+                alertContainer.appendChild(alertDiv);
+
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 5000);
+            }
+
+            // Form submission - FIXED VERSION
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Validate all fields
+                const isEmailValid = validateEmail();
+                const isPasswordValid = validatePassword();
+
+                if (!isEmailValid || !isPasswordValid) {
+                    showAlert('Please fix the errors above');
+                    return;
+                }
+
+                // Show loading state
+                loginBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoader.style.display = 'inline';
+
+                // Get form data
+                const formData = new FormData(form);
+
+                // Convert FormData to URLSearchParams for proper form encoding
+                const params = new URLSearchParams();
+                for (const [key, value] of formData.entries()) {
+                    params.append(key, value);
+                }
+
+                // Submit form
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                })
+                .then(response => {
+                    if (response.redirected) {
+                        // Successful login - redirect
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        // Check if response has redirect info
+                        return response.text().then(text => {
+                            if (text.includes('dashboard')) {
+                                window.location.reload();
+                            } else {
+                                throw new Error('Login failed');
+                            }
+                        });
+                    } else {
+                        // Error response
+                        return response.text().then(text => {
+                            throw new Error(text || 'Login failed');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    showAlert(error.message || 'Login failed. Please check your credentials and try again.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    loginBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    btnLoader.style.display = 'none';
+                });
+            });
+
+            // Auto-fill demo credentials
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'd') {
+                    e.preventDefault();
+                    emailInput.value = 'admin@techcorp.com';
+                    passwordInput.value = 'demo123';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
