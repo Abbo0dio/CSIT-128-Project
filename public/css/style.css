@@ -1,0 +1,28 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #eef2f3;
+  margin: 0;
+  padding: 20px;
+}
+h1, h2 {
+  text-align: center;
+}
+form {
+  width: 300px;
+  margin: 0 auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+td {
+  padding: 8px;
+}
+input, select, button {
+  width: 100%;
+  padding: 6px;
+}
+nav {
+  text-align: center;
+  margin: 20px 0;
+}
