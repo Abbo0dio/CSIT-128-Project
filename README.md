@@ -493,9 +493,8 @@ If you encounter issues:
 5. **Verify .env configuration** is correct
 
 ### Getting Help
-- 📧 Email: your.email@example.com
+- 📧 Email: abbo0dio@pm.me
 - 🐛 Issues: [GitHub Issues](https://github.com/yourusername/internship-portal/issues)
-- 📚 Documentation: Check this README thoroughly
 
 ---
 
