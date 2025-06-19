@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <h2>Sign Up</h2>
+  <form method="POST" action="/signup">
+    <table>
+      <tr>
+        <td>Email:</td>
+        <td><input type="email" name="email" required></td>
+      </tr>
+      <tr>
+        <td>Password:</td>
+        <td><input type="password" name="password" required></td>
+      </tr>
+      <tr>
+        <td>Role:</td>
+        <td>
+          <select name="role">
+            <option value="student">Student</option>
+            <option value="company">Company</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><button type="submit">Sign Up</button></td>
+      </tr>
+    </table>
+  </form>
+</body>
+</html>
